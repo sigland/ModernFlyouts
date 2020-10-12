@@ -201,7 +201,6 @@ namespace ModernFlyouts
 
         internal void SetUpAnimPreps()
         {
-            T1.Y = -40;
             ContentGrid.Opacity = 0;
         }
 
@@ -257,16 +256,18 @@ namespace ModernFlyouts
             var R2 = this.TopBarGrid.RowDefinitions[1];
             if (showTopBar)
             {
+                this.Topmost = false;
                 this.TopBarGrid.Margin = new Thickness(0);
                 R2.Height = new GridLength(0);
                 var glAnim = new GridLengthAnimation()
                 {
                     From = R1.Height,
                     To = new GridLength(32),
-                    Duration = TimeSpan.FromMilliseconds(167),
+                    Duration = TimeSpan.FromMilliseconds(16),
                     EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
                 };
                 R1.BeginAnimation(RowDefinition.HeightProperty, glAnim);
+                this.Topmost = true;
             }
             else
             {
@@ -276,7 +277,7 @@ namespace ModernFlyouts
                 {
                     From = R1.Height,
                     To = new GridLength(0),
-                    Duration = TimeSpan.FromMilliseconds(167),
+                    Duration = TimeSpan.FromMilliseconds(16),
                     EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
                 };
                 R1.BeginAnimation(RowDefinition.HeightProperty, glAnim);

@@ -11,34 +11,14 @@
         ShowInTaskbar="False" Title="ModernFlyouts" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}">
 
     <Window.Resources>
-
         <Storyboard x:Key="ShowFlyout">
-            <ObjectAnimationUsingKeyFrames BeginTime="0" Storyboard.TargetProperty="Visibility">
-                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
-            </ObjectAnimationUsingKeyFrames>
-
             <ui:FadeInThemeAnimation Storyboard.TargetName="ContentGrid" />
-
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TranslateTransform.Y)" Storyboard.TargetName="T1">
-                <DiscreteDoubleKeyFrame KeyTime="0" Value="-40" />
-                <SplineDoubleKeyFrame KeyTime="0:0:0.367" Value="0" KeySpline="0.1, 0.9, 0.2, 1" />
-            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-        
         <Storyboard x:Key="HideFlyout">
             <ui:FadeOutThemeAnimation Storyboard.TargetName="ContentGrid" />
-
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TranslateTransform.Y)" Storyboard.TargetName="T1">
-                <DiscreteDoubleKeyFrame KeyTime="0" Value="0" />
-                <SplineDoubleKeyFrame KeyTime="0:0:0.367" Value="-40" KeySpline="1, 0.2, 0.9, 0.1" />
-            </DoubleAnimationUsingKeyFrames>
-
-            <ObjectAnimationUsingKeyFrames BeginTime="0:0:0.210" Storyboard.TargetProperty="Visibility">
-                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}" />
-            </ObjectAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
-    
+
     <Window.Triggers>
         <EventTrigger RoutedEvent="local:FlyoutWindow.FlyoutShown">
             <BeginStoryboard Storyboard="{StaticResource ShowFlyout}" />
@@ -50,10 +30,6 @@
 
     <Grid x:Name="ContentGrid">
         <ui:ThemeShadowChrome Depth="32" CornerRadius="{DynamicResource FlyoutCornerRadius}" Margin="20,2,20,30">
-            <ui:ThemeShadowChrome.RenderTransform>
-                <TranslateTransform x:Name="T1" />
-            </ui:ThemeShadowChrome.RenderTransform>
-            
             <Border Margin="0" Background="{DynamicResource FlyoutBackground}"
                     CornerRadius="{DynamicResource FlyoutCornerRadius}" RenderTransformOrigin="0.5,0.5">
                 <StackPanel Width="{DynamicResource FlyoutWidth}">
@@ -69,7 +45,7 @@
                             <ColumnDefinition Width="34" />
                             <ColumnDefinition Width="34" />
                         </Grid.ColumnDefinitions>
-                        
+
                         <Button x:Name="SettingsButton" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left"
                                 ui:ControlHelper.CornerRadius="8,2,2,2"
                                 Width="32" Padding="0" Height="32" Background="Transparent" ToolTip="{x:Static resx:Strings.SettingsItem}" Click="settingsItem_Click">
@@ -110,11 +86,11 @@
                     <local:CrossFadeContentControl x:Name="SecondaryHost"
                         Visibility="{Binding FlyoutHelper.SecondaryContentVisible, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Content="{Binding FlyoutHelper.SecondaryContent}" />
-                    
+
                 </StackPanel>
             </Border>
         </ui:ThemeShadowChrome>
-        
+
         <!--#region: Tray Icon -->
         <tb:TaskbarIcon x:Name="TaskbarIcon" TrayMouseDoubleClick="settingsItem_Click">
             <tb:TaskbarIcon.TrayToolTip>
@@ -136,6 +112,6 @@
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
         <!--#endregion-->
-        
+
     </Grid>
 </Window>
