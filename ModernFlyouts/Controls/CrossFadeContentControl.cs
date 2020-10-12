@@ -189,7 +189,7 @@ namespace ModernFlyouts
                 FlipPresenters();
             }
 
-            bool useTransition = /*oldElement != null &&*/ Animates;
+            bool useTransition = /*oldElement != null &&*/ Animates && FlyoutHandler.Instance.FlyoutWindow.Visible;
 
             _newContentPresenter.Opacity = useTransition ? 0 : 1;
             _newContentPresenter.Visibility = Visibility.Visible;

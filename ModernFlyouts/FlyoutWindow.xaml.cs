@@ -70,11 +70,13 @@ namespace ModernFlyouts
 
         private void ShowFlyout()
         {
+            this.Topmost = false;
             Show();
             _elapsedTimer.Stop();
             RoutedEventArgs args = new RoutedEventArgs(FlyoutShownEvent);
             RaiseEvent(args);
             _elapsedTimer.Start();
+            this.Topmost = true;
         }
 
         // Hiding Flyout
@@ -256,7 +258,6 @@ namespace ModernFlyouts
             var R2 = this.TopBarGrid.RowDefinitions[1];
             if (showTopBar)
             {
-                this.Topmost = false;
                 this.TopBarGrid.Margin = new Thickness(0);
                 R2.Height = new GridLength(0);
                 var glAnim = new GridLengthAnimation()
@@ -267,7 +268,6 @@ namespace ModernFlyouts
                     EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
                 };
                 R1.BeginAnimation(RowDefinition.HeightProperty, glAnim);
-                this.Topmost = true;
             }
             else
             {
