@@ -13,7 +13,7 @@ namespace ModernFlyouts
 
         public static event EventHandler Initialized;
 
-        enum HookMessageEnum : uint
+        enum HookMessageEnum : long
         {
             HOOK_MEDIA_PLAYPAUSE = 917504,
             HOOK_MEDIA_PREVIOUS = 786432,
@@ -21,7 +21,9 @@ namespace ModernFlyouts
             HOOK_MEDIA_STOP = 851968,
             HOOK_MEDIA_VOLPLUS = 655360,
             HOOK_MEDIA_VOLMINUS = 589824,
-            HOOK_MEDIA_VOLMUTE = 524288
+            HOOK_MEDIA_VOLMUTE = 524288,
+            HOOK_MEDIA_HEADSET_VOLPLUS = 205690227904,
+            HOOK_MEDIA_HEADSET_VOLMINUS = 557219040240
         }
 
         DispatcherTimer rehooktimer;
@@ -274,27 +276,31 @@ namespace ModernFlyouts
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($"msg={msg}, wParam={wParam}, lParam={lParam}");
+#endif
             if (msg == WM_MOUSEACTIVATE)
             {
                 handled = true;
                 return new IntPtr(MA_NOACTIVATE);
             }
-
-            if (msg == messageShellHookId)
+            
+            if (msg == messageShellHookId || msg == 13)
             {
                 if (wParam == (IntPtr)55)
                 {
                     //Brightness
                     BrightnessFlyoutHelper?.OnExternalUpdated();
                 }
-                else if (wParam == (IntPtr)12)
+                else if (wParam == (IntPtr)12 || wParam == (IntPtr)512)
                 {
                     //Volume
                     AudioFlyoutHelper?.OnExternalUpdated(
-                        (int)lParam == (int)HookMessageEnum.HOOK_MEDIA_NEXT ||
-                        (int)lParam == (int)HookMessageEnum.HOOK_MEDIA_PREVIOUS ||
-                        (int)lParam == (int)HookMessageEnum.HOOK_MEDIA_PLAYPAUSE ||
-                        (int)lParam == (int)HookMessageEnum.HOOK_MEDIA_STOP);
+                        (long)lParam == (long)HookMessageEnum.HOOK_MEDIA_NEXT ||
+                        (long)lParam == (long)HookMessageEnum.HOOK_MEDIA_PREVIOUS ||
+                        (long)lParam == (long)HookMessageEnum.HOOK_MEDIA_PLAYPAUSE ||
+                        (long)lParam == (long)HookMessageEnum.HOOK_MEDIA_HEADSET_VOLPLUS ||
+                        (long)lParam == (long)HookMessageEnum.HOOK_MEDIA_STOP);
                 }
             }
 
